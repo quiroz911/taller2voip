@@ -31,6 +31,10 @@ public class CuentaRepositoryAdapter
     @Transactional
     @Override
     public void updateSaldoByCedula(String cedula, Double monto) {
+        CuentaData cuentaData = this.repository.findByCedula(cedula).get(0);
+        if(cuentaData.getSaldo() - Math.abs(monto)< 0 && monto < 0){
+            throw new RuntimeException("Saldo insuficiente");
+        }
         this.repository.updateSaldoByCedula(monto, cedula);
     }
 
