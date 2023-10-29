@@ -8,4 +8,7 @@ public class ModificarCuentaUseCase {
     public void modificarSaldoCuentaByCedula(String cedula, Double monto) {
         cuentaRepository.updateSaldoByCedula(cedula, monto);
     }
+    public void transferenciaByCedula(String cedulaOrigen, String cedulaDestino, Double monto) {
+        cuentaRepository.transferenciaByCedula(cedulaOrigen, cedulaDestino, monto);
+    }
 }

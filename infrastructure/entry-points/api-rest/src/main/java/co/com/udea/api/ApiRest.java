@@ -75,4 +75,16 @@ public class ApiRest {
         modificarCuentaUseCase.modificarSaldoCuentaByCedula(cedula, monto);
         return ResponseEntity.ok().body("Saldo actualizado");
     }
+
+    @PostMapping(path = "/transferenciaByCedula/{cedulaOrigen}/cedulaDestino/{cedulaDestino}/monto/{monto}")
+    public ResponseEntity<String> transferenciaByCedula(@PathVariable("cedulaOrigen") String cedulaOrigen, @PathVariable("cedulaDestino") String cedulaDestino, @PathVariable("monto") Double monto) {
+        if(cedulaOrigen == null || cedulaOrigen.isEmpty())
+            throw new IllegalArgumentException("La cedula origen no puede ser nula ni vacia");
+        if(cedulaDestino == null || cedulaDestino.isEmpty())
+            throw new IllegalArgumentException("La cedula destino no puede ser nula ni vacia");
+        if(monto == null)
+            throw new IllegalArgumentException("El monto no puede ser nulo");
+        modificarCuentaUseCase.transferenciaByCedula(cedulaOrigen, cedulaDestino, monto);
+        return ResponseEntity.ok().body("Transferencia realizada");
+    }
 }

@@ -38,4 +38,14 @@ public class CuentaRepositoryAdapter
         this.repository.updateSaldoByCedula(monto, cedula);
     }
 
+    @Transactional
+    public void transferenciaByCedula(String cedulaOrigen, String cedulaDestino, Double monto){
+        CuentaData cuentaData = this.repository.findByCedula(cedulaOrigen).get(0);
+        if(cuentaData.getSaldo() - monto< 0){
+            throw new RuntimeException("Saldo insuficiente");
+        }
+        this.repository.updateSaldoByCedula(-monto, cedulaOrigen);
+        this.repository.updateSaldoByCedula(monto, cedulaDestino);
+    }
+
 }
