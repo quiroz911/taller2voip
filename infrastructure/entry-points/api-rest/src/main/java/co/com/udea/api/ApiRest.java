@@ -4,13 +4,11 @@ import co.com.udea.model.usuario.Usuario;
 import co.com.udea.model.usuarioconsaldo.UsuarioConSaldo;
 import co.com.udea.usecase.consultarcuenta.ConsultarCuentaUseCase;
 import co.com.udea.usecase.consultarusuarios.ConsultarUsuariosUseCase;
+import co.com.udea.usecase.modificarcuenta.ModificarCuentaUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +18,7 @@ import java.util.List;
 public class ApiRest {
     private final ConsultarUsuariosUseCase consultarUsuariosUseCase;
     private final ConsultarCuentaUseCase consultarCuentaUseCase;
+    private final ModificarCuentaUseCase modificarCuentaUseCase;
 
     @GetMapping(path = "/usuarios")
     public List<Usuario> consultarUsuarios() {
@@ -65,5 +64,15 @@ public class ApiRest {
     @GetMapping(path = "/cuentas")
     public List<Cuenta> consultarCuentas() {
         return consultarCuentaUseCase.consultarCuentas();
+    }
+
+    @PostMapping(path = "/updateSaldoByCedula/{cedula}/monto/{monto}")
+    public ResponseEntity<String> updateSaldoByCedula(@PathVariable("cedula") String cedula, @PathVariable("monto") Double monto) {
+        if(cedula == null || cedula.isEmpty())
+            throw new IllegalArgumentException("La cedula no puede ser nula ni vacia");
+        if(monto == null)
+            throw new IllegalArgumentException("El monto no puede ser nulo");
+        modificarCuentaUseCase.modificarSaldoCuentaByCedula(cedula, monto);
+        return ResponseEntity.ok().body("Saldo actualizado");
     }
 }

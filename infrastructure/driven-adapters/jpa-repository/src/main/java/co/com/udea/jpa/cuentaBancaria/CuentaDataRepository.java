@@ -1,5 +1,6 @@
 package co.com.udea.jpa.cuentaBancaria;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,8 @@ public interface CuentaDataRepository
     List<CuentaData> findAll();
     @Query(value = "select * from cuenta_bancaria cb  where id_usuario = (select id from usuario u where cedula = :cedula)", nativeQuery = true)
     List<CuentaData> findByCedula(@Param("cedula") String cedula);
+
+    @Modifying
+    @Query(value = "update cuenta_bancaria set saldo = saldo + :monto where id_usuario = (select id from usuario u where cedula = :cedula)", nativeQuery = true)
+    void updateSaldoByCedula(@Param("monto") Double monto, @Param("cedula") String cedula);
 }
